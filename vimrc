@@ -20,13 +20,14 @@ set ls=2            "always show status line
 set modelines=0
 
 "tab
+set smartindent
+set ai
 set tabstop=4       "numbers of spaces of tab char
 set shiftwidth=4    "numbers of spaces when autoindenting
 set softtabstop=4
 set expandtab       "use spaces instead of <tab>
 
 set encoding=utf-8  "encoding
-set scrolloff=3     "keep 3 lines when scrolling
 set showmode
 set showcmd         "show incomplete command
 set hidden
@@ -38,7 +39,6 @@ set ttyfast         "smoother changes
 set ruler           "show the cursor position always
 set backspace=indent,eol,start
 set laststatus=2
-set relativenumber
 set undofile
 set nu
 
@@ -51,13 +51,17 @@ set showmatch
 set hlsearch
 
 "Frame layout
-set wrap
+"set wrap
 set textwidth=79
 set formatoptions=qrn1
 set colorcolumn=85
 
 set list
 set listchars=tab:▸\ ,eol:¬
+
+set foldenable
+set foldmethod=manual
+let php_folding=0 
 
 if has('gui_macvim')
     set guifont=Inconsolata:h15
@@ -115,7 +119,16 @@ nnoremap <leader>t :Tlist<CR>
 nnoremap <leader>u :TlistUpdate<CR>
 nnoremap <leader>s :TlistSessionSave tlist<CR>
 nnoremap <leader>l :TlistSessionLoad tlist<CR>
-let Tlist_File_Fold_Auto_Close = 1 "only active buffer
+" set the names of flags
+let tlist_php_settings = 'php;c:class;f:function;d:constant'
+" close all folds except for current file
+let Tlist_File_Fold_Auto_Close = 1
+" make tlist pane active when opened
+let Tlist_GainFocus_On_ToggleOpen = 1
+" width of window
+let Tlist_WinWidth = 40
+" close tlist when a selection is made
+let Tlist_Close_On_Select = 1
 
 inoremap jj <ESC>
 
@@ -144,5 +157,9 @@ noremap <silent> <F1> :ConqueTermTab bash<CR>
 noremap <silent> <F2> :NERDTreeToggle<CR>
 "yank ring
 noremap <silent> <F9> :YRShow<CR> 
+"PHP folding
+map <F5> <Esc>:EnableFastPHPFolds<Cr> 
+map <F6> <Esc>:EnablePHPFolds<Cr> 
+map <F7> <Esc>:DisablePHPFolds<Cr> 
 "MRU - check syntax
 noremap <silent> <F10> :MRU<CR>
