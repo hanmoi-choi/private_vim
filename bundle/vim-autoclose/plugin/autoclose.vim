@@ -65,7 +65,7 @@ if (!hasmapto( '<Plug>ToggleAutoCloseMappings', 'n' ))
 endif
 fun <SID>ToggleAutoCloseMappings() " --- {{{2
     if g:autoclose_on
-        iunmap "
+        "iunmap "
         iunmap '
         iunmap (
         iunmap )
@@ -79,7 +79,7 @@ fun <SID>ToggleAutoCloseMappings() " --- {{{2
         let g:autoclose_on = 0
         echo "AutoClose Off"
     else
-        inoremap <silent> " <C-R>=<SID>QuoteDelim('"')<CR>
+        "inoremap <silent> " <C-R>=<SID>QuoteDelim('"')<CR>
         inoremap <silent> ' <C-R>=match(getline('.')[col('.') - 2],'\w') == 0 && getline('.')[col('.')-1] != "'" ? "'" : <SID>QuoteDelim("'")<CR>
         inoremap <silent> ( (<C-R>=<SID>CloseStackPush(')')<CR>
         inoremap ) <C-R>=<SID>CloseStackPop(')')<CR>
@@ -217,8 +217,8 @@ function <SID>OpenCloseBackspace() " ---{{{2
         let curpos = col('.')
         let curletter = curline[curpos-1]
         let prevletter = curline[curpos-2]
-        if (prevletter == '"' && curletter == '"') ||
-\          (prevletter == "'" && curletter == "'") ||
+        "if (prevletter == '"' && curletter == '"') ||
+        if(prevletter == "'" && curletter == "'") ||
 \          (prevletter == "(" && curletter == ")") ||
 \          (prevletter == "{" && curletter == "}") ||
 \          (prevletter == "[" && curletter == "]")
