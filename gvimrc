@@ -37,7 +37,7 @@ set so=7
 " Turn on the WiLd menu
 set wildmenu
 " Ignore compiled files
-set wildignore=*.o,*~,*.pyc
+set wildignore=*.o,*~,*.pyc,*.swp,*.bak,*.class
 "Always show current position
 set ruler
 " Height of the command bar
@@ -55,6 +55,7 @@ set smartcase
 set hlsearch
 " Makes search act like search in modern browsers
 set incsearch
+set ignorecase
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
 " For regular expressions turn magic on
@@ -65,9 +66,11 @@ set showmatch
 set mat=2
 " No annoying sound on errors
 set novisualbell
+set noerrorbells
 set t_vb=
 set tm=500
-
+set undolevels=1000      " use many muchos levels of undo
+set title                " change the terminal's title
 set encoding=utf-8  "encoding
 set showmode
 set showcmd         "show incomplete command
@@ -130,7 +133,7 @@ if has("mac") || has("macunix")
 endif
 
 "Autocomplete Key remap
-inoremap <D-Space> <C-x><C-o>
+inoremap <D-Space> <C-n>
 
 set nocompatible    "use vim default
 set ls=2            "always show status line
@@ -185,7 +188,6 @@ set laststatus=2
 " Format the status line
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
 
-
 set guifont=Inconsolata:h15
 colorscheme Clarity
 "Frame layout
@@ -195,7 +197,10 @@ set formatoptions=qrn1
 set colorcolumn=85
 
 set list
-set listchars=tab:▸\ ,eol:¬
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+autocmd filetype css,html,xml set listchars-=tab:>.
+"set listchars=tab:▸\ ,trail:.,extends:#,nbsp:".
+"autocmd filetype html,xml set listchars-=tab:▸\ ,
 
 set foldenable
 set foldmethod=manual
@@ -233,7 +238,10 @@ nnoremap <leader>s ?{<cr>jv/^\s*\}?$<cr>k:sort<cr>:noh<cr>
 nnoremap <leader>q gqip
 
 "Taglist
-set tags+=~/.vim/tags/php_tags/tags
+set tags+=./tags
+"set tags+=~/.vim/tags/php_tags
+
+autocmd BufWritePost *.php :TlistUpdate
 nnoremap <leader>t :Tlist<CR>
 nnoremap <leader>u :TlistUpdate<CR>
 nnoremap <leader>s :TlistSessionSave tlist<CR>
@@ -243,10 +251,17 @@ nnoremap <leader>l :TlistSessionLoad tlist<CR>
 if has("gui_macvim")
     macmenu &File.New\ Tab key=<nop>
     macmenu &Tools.Make key=<nop>
+    macmenu &Tools.List\ Errors key=<nop>
     map <D-t> :CommandT<CR>
     map <D-b> :CommandTBuffer<CR>
+    map <D-l> ,lj
 endif
 
+"yank ring
+map <D-y>  :YRShow<CR>
+
+let g:CommandTMaxFiles=100
+let g:CommandTMaxDepth=10
 
 " set the names of flags
 let tlist_php_settings = 'php;c:class;f:function;d:constant'
@@ -269,7 +284,6 @@ let NERDTreeWinPos = "right"
 "let loaded_nerd_tree = 1
 
 "Tabular
-let mapleader=','
 if exists(":Tabularize")
 nmap <Leader>a= :Tabularize /=<CR>
 vmap <Leader>a= :Tabularize /=<CR>
@@ -277,21 +291,54 @@ nmap <Leader>a: :Tabularize /:\zs<CR>
 vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 
-"MRU
-let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
+" Use Q for formatting the current paragraph (or selection)
+vmap Q gq
+nmap Q gqap
+
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" => vimgrep searching and cope displaying
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSelection('gv')<CR>
+
+" Open vimgrep and put the cursor in the right position
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+
+" Vimgreps in the current file
+"map <leader>gc :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>gr :call VisualSelection('replace')<CR>
+
+" Do :help cope if you are unsure what cope is. It's super useful!
+"
+" When you search with vimgrep, display your results in cope by doing:
+"   <leader>cc
+"
+" To go to the next search result do:
+"   <leader>n
+"
+" To go to the previous search results do:
+"   <leader>p
+"
+"map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+"map <leader>n :cn<cr>
+"map <leader>p :cp<cr>
 
 "Conque - Shell plugin
 noremap <silent> <F1> :ConqueTermTab bash<CR>
 " Give a shortcut key to NERD Tree
 noremap <silent> <F2> :NERDTreeToggle<CR>
-"yank ring
-noremap <silent> <F9> :YRShow<CR>
 "PHP folding
-map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr>
-"MRU - check syntax
-noremap <silent> <F10> :MRU<CR>
+
+set pastetoggle=<F10>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
@@ -352,3 +399,4 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+
