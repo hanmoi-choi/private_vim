@@ -20,7 +20,7 @@ highlight Todo           gui=BOLD guifg=#1F3055      guibg=White
 highlight NonText        gui=NONE guifg=#334C51      guibg=SteelBlue4
 highlight LineNr         gui=NONE guifg=HoneyDew2    guibg=Grey25
 highlight StatusLineNC   gui=BOLD guifg=Grey80       guibg=LightBlue4
-highlight StatusLine     gui=BOLD guifg=Blue3   guibg=Goldenrod2
+highlight StatusLine     gui=BOLD guifg=Gold2       guibg=bg
 highlight IncSearch      gui=NONE guifg=Black        guibg=#FFE568
 highlight Search         gui=UNDERLINE,BOLD          guifg=#FFE568 guibg=bg
 highlight Cursor         gui=NONE guifg=Grey50       guibg=#FFE568
