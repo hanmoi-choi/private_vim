@@ -186,7 +186,21 @@ endtry
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+" jamessan's
+
+set statusline=   " clear the statusline for when vimrc is reloaded
+set statusline+=[%-1.1n]\                       " buffer number
+set statusline+=[MODE:%{HasPaste()}]\           " buffer number
+set statusline+=[CWD:%{getcwd()}]\  
+set statusline+=%y\                             "filetype
+set statusline+=%h                              "help file flag
+set statusline+=%m\                             "modified flag
+set statusline+=%r                              "read only flag
+set statusline+=%=                              " right align
+set statusline+=%-10{FileSize()}
+set statusline+=%{strlen(&fenc)?&fenc:&enc},    " encoding
+set statusline+=%-10.5{&fileformat}\            " file format
+set statusline+=%-12.(%l,%c%V%)\ %<%P           " offset
 
 set guifont=Inconsolata:h15
 colorscheme Clarity
@@ -252,10 +266,12 @@ if has("gui_macvim")
     macmenu &File.New\ Tab key=<nop>
     macmenu &Tools.Make key=<nop>
     macmenu &Tools.List\ Errors key=<nop>
-    map <D-t> :CommandT<CR>
+    "map <D-t> :CommandT<CR>
     map <D-b> :CommandTBuffer<CR>
     map <D-l> ,lj
 endif
+
+map <D-t> ,p
 
 "yank ring
 map <D-y>  :YRShow<CR>
@@ -374,9 +390,9 @@ endfunction
 " Returns true if paste mode is enabled
 function! HasPaste()
     if &paste
-        return 'PASTE MODE  '
+        return 'PASTE'
     en
-    return ''
+    return 'NORMAL'
 endfunction
 
 " Don't close window, when deleting a buffer
@@ -399,4 +415,17 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+function! FileSize()
+    let bytes = getfsize(expand("%:p"))
+    if bytes <= 0
+        return ""
+    endif
 
+    if bytes < 1024
+        return bytes
+    elseif bytes > (1024 * 1024)
+        return (bytes /(1024 * 1024)) . "M"
+    else
+        return (bytes / 1024) . "K"
+    endif
+endfunction

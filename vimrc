@@ -252,10 +252,13 @@ if has("gui_macvim")
     macmenu &File.New\ Tab key=<nop>
     macmenu &Tools.Make key=<nop>
     macmenu &Tools.List\ Errors key=<nop>
-    map <D-t> :CommandT<CR>
+    "map <D-t> :CommandT<CR>
     map <D-b> :CommandTBuffer<CR>
     map <D-l> ,lj
 endif
+
+"yank ring
+map <D-y>  :YRShow<CR>
 
 let g:CommandTMaxFiles=100
 let g:CommandTMaxDepth=10
@@ -331,14 +334,10 @@ map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 noremap <silent> <F1> :ConqueTermTab bash<CR>
 " Give a shortcut key to NERD Tree
 noremap <silent> <F2> :NERDTreeToggle<CR>
-"yank ring
-noremap <silent> <F9> :YRShow<CR>
 "PHP folding
-map <F5> <Esc>:EnableFastPHPFolds<Cr>
-
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr>
-"MRU - check syntax
+
 set pastetoggle=<F10>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
