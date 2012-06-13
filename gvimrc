@@ -291,12 +291,14 @@ let Tlist_WinWidth = 40
 let Tlist_Close_On_Select = 1
 
 inoremap jj <ESC>
+cnoremap jj <ESC>
+vnoremap ,   <ESC>
 
-"Mark-Down
-noremap <leader>mc :%! /usr/local/bin/Markdown.pl --html4tags<CR>
+"mark-down
+noremap <leader>mc :%! /usr/local/bin/markdown.pl --html4tags<cr>
 
-"NERNTree
-let NERDTreeWinPos = "right"
+"nerntree
+let nerdtreewinpos = "right"
 "let loaded_nerd_tree = 1
 
 "Tabular
